@@ -23,6 +23,16 @@ export class MapComponent implements OnInit {
    */
   mapTypeId: google.maps.MapTypeId;
   
+  /**
+   * Enables/disables street view.
+   */
+  streetViewControl: boolean;
+
+  /**
+   * Enables/disables map markers.
+   */
+  mapMarker: boolean;
+  
   protected map: google.maps.Map;
   
   constructor(public elementRef: ElementRef) {
@@ -32,13 +42,21 @@ export class MapComponent implements OnInit {
     this.mapTypeId = google.maps.MapTypeId.ROADMAP;
 
     // Sets the initial zoom.
-    this.zoom = 4;    
+    this.zoom = 4;  
+    
+    // Disable street view
+    this.streetViewControl = false;
+
+    // Enable map marker
+    this.mapMarker = true;  
   }
   
   ngOnInit() {
     let mapOptions = {
       center: this.center,
+      mapMarker: this.mapMarker,
       mapTypeId: this.mapTypeId,
+      streetViewControl: this.streetViewControl,
       zoom: <number>this.zoom      
     };
 
