@@ -43,8 +43,24 @@ export class MapComponent implements OnInit {
     };
 
     // Instances the map.
-    var el: HTMLElement = this.elementRef.nativeElement.querySelector('#map');
+    let el: HTMLElement = this.elementRef.nativeElement.querySelector('#map');
     this.map = new google.maps.Map(el, mapOptions);
+    
+    window.addEventListener('resize', () => { this.resize(); });
+  }
+  
+  /**
+   * Resizes the map, updating its center.
+   */
+  private resize() {
+    // Saves the center.
+    let latLng: google.maps.LatLng = this.map.getCenter();
+
+    // Triggers resize event.
+    google.maps.event.trigger(this.map, 'resize');
+
+    // Restores the center.
+    this.map.setCenter(latLng);
   }
 
 }
