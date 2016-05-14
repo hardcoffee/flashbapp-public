@@ -65,6 +65,36 @@ export class MapComponent implements OnInit {
     this.map = new google.maps.Map(el, mapOptions);
     
     window.addEventListener('resize', () => { this.resize(); });
+    
+    this.map.addListener('click', function(event) {
+      let flash = this.createFlash(event.latLng, 'Here i had a flashback!');
+
+      let infowindow = new google.maps.InfoWindow({
+        content: 'Id: '+ flash.get('id')
+      });
+
+      flash.addListener('click', function() {
+        infowindow.open(flash.get('map'), flash);
+      });
+
+      // Here we should open the form to load the data
+    }.bind(this));
+  }
+  
+  private createFlash(position: google.maps.LatLng, title: string) {
+    let flash = new google.maps.Marker({
+      map: this.map,
+      draggable: true,
+      position: position,
+      title: title,
+      visible: true
+    });
+    
+    flash.setValues({
+      id: Math.round(Math.random() * (999 - 100) + 100) // 100<->999
+   });
+
+    return flash;
   }
   
   /**
