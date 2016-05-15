@@ -1,3 +1,10 @@
+.md-actions {
+  overflow: hidden;
+}
+
+[md-raised-button] {
+  float: right;
+}
 .help-text {
   margin-left: 7px;
 
