@@ -6,6 +6,7 @@ import {MdIcon, MdIconRegistry} from '@angular2-material/icon';
 
 import {MapComponent} from './../map/map.component';
 import {FlashForm} from './../flash-form/flash-form.component';
+import {FlashView} from './../flash-view/flash-view.component';
 
 @Component({
   selector: 'flash-bapp',
@@ -16,13 +17,15 @@ import {FlashForm} from './../flash-form/flash-form.component';
     MdToolbar,
     MdIcon,
     MapComponent,
-    FlashForm
+    FlashForm,
+    FlashView
   ],
   providers: [ MdIconRegistry ]
 })
 export class MainComponent {
   isOnPlace: boolean = false;
   formShowing: boolean = false;
+  flashId: number = 1;
 
   setIsOnPlace($event) {
     this.isOnPlace = $event.value;
