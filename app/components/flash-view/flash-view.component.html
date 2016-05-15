@@ -1,12 +1,16 @@
 <div class="md-card-container">
-  <md-card *ngFor="let flash in flashes | async">
-    {{ flash }}
-    <button md-fab (click)="closeItSelf()">
+  <md-card *ngFor="let flash of flashes | async; let i=index">
+    <button md-fab (click)="closeItSelf()" *ngIf="i == 0">
       <md-icon>close</md-icon>
-    </button>
-    <md-card-title>{{markerValues.id}}</md-card-title>
+    </button>    
+    <md-card-title></md-card-title>
     <md-card-content>
-      
+      <span>Title</span>
+      {{flash.title}}
+    </md-card-content>
+    <md-card-content>
+      <span>Description</span>
+      {{flash.description}}
     </md-card-content>
   </md-card>  
 </div>
