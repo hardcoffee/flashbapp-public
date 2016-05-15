@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, Output, EventEmitter} from '@angular/core';
 import {MD_CARD_DIRECTIVES} from '@angular2-material/card';
 import {MdIcon, MdIconRegistry} from '@angular2-material/icon';
 
@@ -8,10 +8,15 @@ import {MdIcon, MdIconRegistry} from '@angular2-material/icon';
   styleUrls: ['app/components/flash-view/flash-view.component.css'],
   directives: [
     MD_CARD_DIRECTIVES,
-    MdIcon,
+    MdIcon
   ],
   providers: [ MdIconRegistry ]
 })
 export class FlashView {
   @Input('marker-values') markerValues: Object;
+  @Output('close-view') closeView = new EventEmitter();
+
+  closeItSelf() {
+    this.closeView.emit({});
+  }
 }

@@ -17,7 +17,9 @@
           (marker-selected)="openFlashView($event)"></map-app>
     </section>
     <section class="flash-view-container" [ngClass]="{enabled: isFlashViewOpen}">
-      <flash-view *ngIf="isFlashViewOpen" [marker-values]="selectedMarker"></flash-view>
+      <flash-view *ngIf="isFlashViewAlive"
+          [marker-values]="selectedMarker"
+          (close-view)="isFlashViewOpen = false"></flash-view>
     </section>
   </md-content>
 </div>

@@ -26,6 +26,7 @@ export class MainComponent {
   isOnPlace: boolean = false;
   formShowing: boolean = false;
   isFlashViewOpen: boolean = false;
+  isFlashViewAlive: boolean = false;
   selectedMarker: Object;
 
   constructor(private _ngZone: NgZone) {}
@@ -41,7 +42,7 @@ export class MainComponent {
   openFlashView(event) {
     this._ngZone.run(function() {
       this.selectedMarker = event.marker;
-      this.isFlashViewOpen = true;
+      this.isFlashViewOpen = this.isFlashViewAlive = true;
     }.bind(this));
   }
 }
