@@ -1,22 +1,17 @@
 import {Component, Input} from '@angular/core';
-import {NgModel} from '@angular/common';
 import {MD_CARD_DIRECTIVES} from '@angular2-material/card';
-import {MdButton} from '@angular2-material/button';
-import {MdInput} from '@angular2-material/input';
-import {MdCheckbox} from '@angular2-material/checkbox';
+import {MdIcon, MdIconRegistry} from '@angular2-material/icon';
 
 @Component({
   selector: 'flash-view',
   templateUrl: 'app/components/flash-view/flash-view.component.html',
+  styleUrls: ['app/components/flash-view/flash-view.component.css'],
   directives: [
-    NgModel,
     MD_CARD_DIRECTIVES,
-    MdButton,
-    MdInput,
-    MdCheckbox
-  ]
+    MdIcon,
+  ],
+  providers: [ MdIconRegistry ]
 })
 export class FlashView {
-  @Input('flash-id') flashId: number; 
-  
+  @Input('marker-values') markerValues: Object;
 }

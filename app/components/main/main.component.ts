@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, NgZone} from '@angular/core';
 import {NgClass} from '@angular/common';
 import {MD_CARD_DIRECTIVES} from '@angular2-material/card';
 import {MdToolbar} from '@angular2-material/toolbar';
@@ -25,7 +25,10 @@ import {FlashView} from './../flash-view/flash-view.component';
 export class MainComponent {
   isOnPlace: boolean = false;
   formShowing: boolean = false;
-  flashId: number = 1;
+  isFlashViewOpen: boolean = false;
+  selectedMarker: Object;
+
+  constructor(private _ngZone: NgZone) {}
 
   updateIsOnPlaceFromInput(event) {
     this.isOnPlace = event.value;
@@ -33,5 +36,12 @@ export class MainComponent {
 
   updateIsOnPlaceFromMap(event) {
     this.isOnPlace = event.externally;
+  }
+
+  openFlashView(event) {
+    this._ngZone.run(function() {
+      this.selectedMarker = event.marker;
+      this.isFlashViewOpen = true;
+    }.bind(this));
   }
 }
