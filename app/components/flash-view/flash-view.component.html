@@ -1,8 +1,12 @@
-<md-card class="md-card-container">
-  <button md-fab (click)="closeItSelf()">
-    <md-icon>close</md-icon>
-  </button>
-  <md-card-title>{{markerValues.id}}</md-card-title>
-  <md-card-content>
-  </md-card-content>
-</md-card>
+<div class="md-card-container">
+  <md-card *ngFor="let flash in flashes | async">
+    {{ flash }}
+    <button md-fab (click)="closeItSelf()">
+      <md-icon>close</md-icon>
+    </button>
+    <md-card-title>{{markerValues.id}}</md-card-title>
+    <md-card-content>
+      
+    </md-card-content>
+  </md-card>  
+</div>
