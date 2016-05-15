@@ -17,4 +17,6 @@ import {MdCheckbox} from '@angular2-material/checkbox';
     MdCheckbox
   ],
 })
-export class FlashForm { }
+export class FlashForm {
+  isOnPlace: boolean = false;
+}

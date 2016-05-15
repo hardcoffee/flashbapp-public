@@ -1,3 +1,5 @@
+/* Main layout */
+
 [fullscreen] {
   position: absolute;
   top: 0;
@@ -15,4 +17,32 @@ md-content {
   display: block;
   margin-left: 0;
   margin-right: 0;
+}
+/* Toolbar */
+
+md-toolbar {
+  position: relative;
+  z-index: 2;
+}
+
+.md-toolbar-tools {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Initially hidden form */
+.form-container {
+  position: absolute;
+  top: -150px;
+
+  width: 100%;
+
+  transition: all ease-out 0.7s;
+  z-index: 1;
+}
+.form-container.enabled {
+  top: 60px;
 }
