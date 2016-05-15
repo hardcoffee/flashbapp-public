@@ -8,7 +8,7 @@ import {Component, OnInit, ElementRef, Input} from '@angular/core';
 
 export class MapComponent implements OnInit {
   @Input('disable-picker') disablePicker: boolean;
-  
+
   /**
    * Center map. Required.
    */
@@ -18,12 +18,12 @@ export class MapComponent implements OnInit {
    * The initial map zoom level. Required.
    */
   zoom: number;
-  
+
   /**
    * The initial map mapTypeId. Defaults to ROADMAP.
    */
   mapTypeId: google.maps.MapTypeId;
-  
+
   /**
    * Enables/disables street view.
    */
@@ -33,9 +33,9 @@ export class MapComponent implements OnInit {
    * Enables/disables map markers.
    */
   mapMarker: boolean;
-  
+
   protected map: google.maps.Map;
-  
+
   constructor(public elementRef: ElementRef) {
     // Sets initial center map.
     this.center = new google.maps.LatLng(-38.416097, -63.616672);
@@ -43,37 +43,40 @@ export class MapComponent implements OnInit {
     this.mapTypeId = google.maps.MapTypeId.ROADMAP;
 
     // Sets the initial zoom.
-    this.zoom = 4;  
-    
+    this.zoom = 4;
+
     // Disable street view
     this.streetViewControl = false;
 
     // Enable map marker
-    this.mapMarker = true;     
+    this.mapMarker = true;
   }
-  
+
   ngOnInit() {
     console.log(this.disablePicker);
-    
+    setInterval(function() {
+      console.log('disablePicker', this.disablePicker);
+    }.bind(this), 600);
+
     let mapOptions = {
       center: this.center,
       mapMarker: this.mapMarker,
       mapTypeId: this.mapTypeId,
       streetViewControl: this.streetViewControl,
-      zoom: <number>this.zoom      
+      zoom: <number>this.zoom
     };
 
     // Instances the map.
     let el: HTMLElement = this.elementRef.nativeElement.querySelector('#map');
     this.map = new google.maps.Map(el, mapOptions);
-    
+
     window.addEventListener('resize', () => { this.resize(); });
-    
+
     this.map.addListener('click', function(event) {
       let flash = this.createFlash(event.latLng, 'Here i had a flashback!');
 
       let contentValue = 'Id: '+ flash.get('id');
-      let infowindow = this.createInfowindow(contentValue);      
+      let infowindow = this.createInfowindow(contentValue);
 
       flash.addListener('click', function() {
         infowindow.open(flash.get('map'), flash);
@@ -81,7 +84,7 @@ export class MapComponent implements OnInit {
 
       // Here we should open the form to load the data
     }.bind(this));
-    
+
     /**
      * Create the search box and link it to the UI element.
      */
@@ -92,11 +95,11 @@ export class MapComponent implements OnInit {
     // Bias the SearchBox results towards current map's viewport.
     searchBox.addListener('bounds_changed', function() {
       let flashMarker = this.createFlash(searchBox.getBounds().getCenter(), 'Search flashback');
-      this.map.fitBounds(searchBox.getBounds());                  
-      
+      this.map.fitBounds(searchBox.getBounds());
+
       let infowindow = this.createInfowindow('You can drag me! Make sure of the place using Satellite view!');
       infowindow.open(flashMarker.get('map'), flashMarker);
-      
+
     }.bind(this));
 
     // Listen for the event fired when the user selects a prediction and retrieve
@@ -131,15 +134,15 @@ export class MapComponent implements OnInit {
       this.setBounds(bounds);
     });
   }
-  
+
   private createInfowindow(contentValue: string) {
     let infowindow = new google.maps.InfoWindow({
       content: contentValue
     });
-    
-    return infowindow;    
+
+    return infowindow;
   }
-  
+
   private createFlash(position: google.maps.LatLng, title: string) {
     let flash = new google.maps.Marker({
       map: this.map,
@@ -148,14 +151,14 @@ export class MapComponent implements OnInit {
       title: title,
       visible: true
     });
-    
+
     flash.setValues({
       id: Math.round(Math.random() * (999 - 100) + 100) // 100<->999
    });
 
     return flash;
   }
-  
+
   /**
    * Resizes the map, updating its center.
    */

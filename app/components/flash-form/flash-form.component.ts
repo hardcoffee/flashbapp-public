@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {NgModel} from '@angular/common';
 import {MD_CARD_DIRECTIVES} from '@angular2-material/card';
 import {MdButton} from '@angular2-material/button';
@@ -15,8 +15,8 @@ import {MdCheckbox} from '@angular2-material/checkbox';
     MdButton,
     MdInput,
     MdCheckbox
-  ],
+  ]
 })
 export class FlashForm {
-  isOnPlace: boolean = false;
+  @Input('is-on-place') isOnPlace: boolean;
 }

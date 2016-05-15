@@ -21,7 +21,6 @@ import {FlashForm} from './../flash-form/flash-form.component';
   providers: [ MdIconRegistry ]
 })
 export class MainComponent {
-
-  isOnPlace: boolean = false;
+  isOnPlace: boolean = true;
   formShowing: boolean = false;
 }
