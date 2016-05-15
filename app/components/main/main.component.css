@@ -40,9 +40,22 @@ md-toolbar {
 
   width: 100%;
 
-  transition: all ease-out 0.7s;
+  transition: all ease-out 0.6s;
   z-index: 3;
 }
 .form-container.enabled {
   top: 60px;
+}
+
+/* Initially hidden view */
+.flash-view-container {
+  position: absolute;
+  right: 0;
+  bottom: -300px;
+  left: 0;
+
+  transition: all ease-in-out 0.5s;
+}
+.flash-view-container.enabled {
+  bottom: 0;
 }
