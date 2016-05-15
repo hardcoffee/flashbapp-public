@@ -58,10 +58,12 @@ md-toolbar {
   height: calc(100% - 110px);
   width: 30vw;
   right: 0;
-  left: 0;
+  left: 0;  
+  display: none;
 
   transition: all ease-in-out 0.5s;
 }
 .flash-view-container.enabled {
   bottom: 0;
+  display: inherit;
 }
