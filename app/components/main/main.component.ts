@@ -8,7 +8,7 @@ import {MapComponent} from './../map/map.component';
 import {FlashForm} from './../flash-form/flash-form.component';
 
 @Component({
-  selector: 'my-app',
+  selector: 'flash-bapp',
   templateUrl: 'app/components/main/main.component.html',
   styleUrls: ['app/components/main/main.component.css'],
   directives: [
@@ -23,8 +23,8 @@ import {FlashForm} from './../flash-form/flash-form.component';
 export class MainComponent {
   isOnPlace: boolean = false;
   formShowing: boolean = false;
-  
-  isOnPlaceChange($event) {
+
+  setIsOnPlace($event) {
     this.isOnPlace = $event.value;
   }
 }

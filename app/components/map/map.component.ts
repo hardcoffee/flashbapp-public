@@ -33,10 +33,55 @@ export class MapComponent implements OnInit, OnChanges {
    * Enables/disables map markers.
    */
   mapMarker: boolean;
-  
+
   unSavedFlashBack: any;
 
   protected map: google.maps.Map;
+
+  private clearFlash() {
+    if (this.unSavedFlashBack) {
+      this.unSavedFlashBack.setMap(null);
+      this.unSavedFlashBack = undefined;
+    }
+  }
+
+  private createInfowindow(contentValue: string) {
+    let infowindow = new google.maps.InfoWindow({
+      content: contentValue
+    });
+
+    return infowindow;
+  }
+
+  private createFlash(position: google.maps.LatLng, title: string) {
+    let flash = new google.maps.Marker({
+      map: this.map,
+      draggable: true,
+      position: position,
+      title: title,
+      visible: true
+    });
+
+    flash.setValues({
+      id: Math.round(Math.random() * (999 - 100) + 100) // 100<->999
+    });
+
+    return flash;
+  }
+
+  /**
+   * Resizes the map, updating its center.
+   */
+  private resize() {
+    // Saves the center.
+    let latLng: google.maps.LatLng = this.map.getCenter();
+
+    // Triggers resize event.
+    google.maps.event.trigger(this.map, 'resize');
+
+    // Restores the center.
+    this.map.setCenter(latLng);
+  }
 
   constructor(public elementRef: ElementRef) {
     // Sets initial center map.
@@ -53,38 +98,42 @@ export class MapComponent implements OnInit, OnChanges {
     // Enable map marker
     this.mapMarker = true;
   }
-  
-  ngOnChanges() {    
-    //If is on place implements Geolocation   
+
+  /**
+   * Watch an external boolean property to see
+   * when the user wants to enable geo location
+   * and mark it as the place to create the flash.
+   */
+  ngOnChanges() {
+    this.clearFlash();
+
     if (this.isOnPlace) {
-      this.clearFlash();
       if (!navigator.geolocation) {
         console.error('Geolocation is not supported by this browser.');
+        return;
       }
 
       navigator.geolocation.getCurrentPosition(function(position) {
-        var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+        let pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
         let flash = this.createFlash(pos, 'You are here');
         this.map.setCenter(pos);
-        
+
         let contentValue = 'Id: '+ flash.get('id');
         let infowindow = this.createInfowindow(contentValue);
 
         flash.addListener('click', function() {
           infowindow.open(flash.get('map'), flash);
         });
-        
-        this.unSavedFlashBack = flash;      
+
+        this.unSavedFlashBack = flash;
       }.bind(this), function() {
         console.error('Error on get current position');
       });
-    } else {
-      this.clearFlash();
     }
   }
 
   ngOnInit() {
-    
+
     let mapOptions = {
       center: this.center,
       mapMarker: this.mapMarker,
@@ -100,18 +149,18 @@ export class MapComponent implements OnInit, OnChanges {
     window.addEventListener('resize', () => { this.resize(); });
 
     this.map.addListener('click', function(event) {
-      
+
       this.clearFlash();
-        
+
       let flash = this.createFlash(event.latLng, 'Here i had a flashback!');
 
-      let contentValue = 'Id: '+ flash.get('id');
+      let contentValue = 'Id: ' + flash.get('id');
       let infowindow = this.createInfowindow(contentValue);
 
       flash.addListener('click', function() {
         infowindow.open(flash.get('map'), flash);
       });
-      
+
       this.unSavedFlashBack = flash;
 
       // Here we should open the form to load the data
@@ -126,12 +175,12 @@ export class MapComponent implements OnInit, OnChanges {
 
     // Bias the SearchBox results towards current map's viewport.
     searchBox.addListener('bounds_changed', function() {
-      let flashMarker = this.createFlash(searchBox.getBounds().getCenter(), 'Search flashback');
       this.map.fitBounds(searchBox.getBounds());
 
+      // Create a flash with a helpful message
+      let flash = this.createFlash(searchBox.getBounds().getCenter(), 'Search flashback');
       let infowindow = this.createInfowindow('You can drag me! Make sure of the place using Satellite view!');
-      infowindow.open(flashMarker.get('map'), flashMarker);
-
+      infowindow.open(this.map, flash);
     }.bind(this));
 
     // Listen for the event fired when the user selects a prediction and retrieve
@@ -166,50 +215,4 @@ export class MapComponent implements OnInit, OnChanges {
       this.setBounds(bounds);
     });
   }
-  
-  private clearFlash() {
-    if (typeof this.unSavedFlashBack !== 'undefined') {
-      this.unSavedFlashBack.setMap(null);
-      this.unSavedFlashBack = undefined;
-    }
-  }
-
-  private createInfowindow(contentValue: string) {
-    let infowindow = new google.maps.InfoWindow({
-      content: contentValue
-    });
-
-    return infowindow;
-  }
-
-  private createFlash(position: google.maps.LatLng, title: string) {
-    let flash = new google.maps.Marker({
-      map: this.map,
-      draggable: true,
-      position: position,
-      title: title,
-      visible: true
-    });
-
-    flash.setValues({
-      id: Math.round(Math.random() * (999 - 100) + 100) // 100<->999
-   });
-
-    return flash;
-  }
-
-  /**
-   * Resizes the map, updating its center.
-   */
-  private resize() {
-    // Saves the center.
-    let latLng: google.maps.LatLng = this.map.getCenter();
-
-    // Triggers resize event.
-    google.maps.event.trigger(this.map, 'resize');
-
-    // Restores the center.
-    this.map.setCenter(latLng);
-  }
-
 }

@@ -9,9 +9,8 @@
       </div>
     </md-toolbar>
     <section class="form-container" [ngClass]="{enabled: formShowing}">
-      <flash-form [is-on-place]="isOnPlace" (change)="isOnPlaceChange($event);"></flash-form> 
+      <flash-form [is-on-place]="isOnPlace" (checkbox-changed)="setIsOnPlace($event)"></flash-form>
       <map-app [is-on-place]="isOnPlace"></map-app>
-      <flash-form></flash-form>
     </section>
   </md-content>
 </div>

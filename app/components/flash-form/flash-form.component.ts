@@ -15,14 +15,15 @@ import {MdCheckbox} from '@angular2-material/checkbox';
     MdButton,
     MdInput,
     MdCheckbox
-  ],
-  outputs: ['myevent']
+  ]
 })
 export class FlashForm {
-  @Input('is-on-place') isOnPlace: boolean;  
-  @Output('change') myevent = new EventEmitter(); 
-  
-  lunchEvent(){
-    this.myevent.emit({ value: !this.isOnPlace });
+  @Input('is-on-place') isOnPlace: boolean;
+  @Output('checkbox-changed') checkboxChanged = new EventEmitter();
+
+  checkboxValueUpdated(){
+    this.checkboxChanged.emit({
+      value: !this.isOnPlace
+    });
   }
 }
