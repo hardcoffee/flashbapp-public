@@ -2,12 +2,16 @@
   <md-content>
     <md-toolbar>
       <div class="md-toolbar-tools">
-        <span>Angular 2 app</span>
+        <span>Flashbapp</span>
+        <button md-fab (click)="formShowing = !formShowing">
+          <md-icon>create</md-icon>
+        </button>
       </div>
     </md-toolbar>
-    <section>
+    <section class="form-container" [ngClass]="{enabled: formShowing}">
       <flash-form></flash-form> 
       <map-app [disable-picker]="isOnPlace"></map-app>
+      <flash-form></flash-form>
     </section>
   </md-content>
 </div>
