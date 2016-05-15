@@ -38,6 +38,10 @@ export class MainComponent {
   updateIsOnPlaceFromMap(event) {
     this.isOnPlace = event.externally;
   }
+  
+  closeForm(event) {
+    this.formShowing = event.value;
+  }
 
   openFlashView(event) {
     this._ngZone.run(function() {

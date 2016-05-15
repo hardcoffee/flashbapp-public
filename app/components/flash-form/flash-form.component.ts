@@ -20,10 +20,17 @@ import {MdCheckbox} from '@angular2-material/checkbox';
 export class FlashForm {
   @Input('is-on-place') isOnPlace: boolean;
   @Output('checkbox-changed') checkboxChanged = new EventEmitter();
+  @Output('close-form') doCloseForm = new EventEmitter();
 
   checkboxValueUpdated(){
     this.checkboxChanged.emit({
       value: !this.isOnPlace
     });
+  }
+  
+  closeForm() {
+    this.doCloseForm.emit({
+      value: false
+    })
   }
 }
