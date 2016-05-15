@@ -1,4 +1,4 @@
-import {Component, OnInit, ElementRef} from '@angular/core';
+import {Component, OnInit, ElementRef, Input} from '@angular/core';
 
 @Component({
   selector: 'map-app',
@@ -7,6 +7,7 @@ import {Component, OnInit, ElementRef} from '@angular/core';
 })
 
 export class MapComponent implements OnInit {
+  @Input('disable-picker') disablePicker: boolean;
   
   /**
    * Center map. Required.
@@ -48,10 +49,12 @@ export class MapComponent implements OnInit {
     this.streetViewControl = false;
 
     // Enable map marker
-    this.mapMarker = true;  
+    this.mapMarker = true;     
   }
   
   ngOnInit() {
+    console.log(this.disablePicker);
+    
     let mapOptions = {
       center: this.center,
       mapMarker: this.mapMarker,

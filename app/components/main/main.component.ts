@@ -14,4 +14,6 @@ import {FlashForm} from './../flash-form/flash-form.component';
     FlashForm
   ]
 })
-export class MainComponent { }
+export class MainComponent {
+  isOnPlace: boolean = false;
+ }
