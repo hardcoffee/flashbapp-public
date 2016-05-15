@@ -1,7 +1,7 @@
-System.register(['@angular/platform-browser-dynamic', '@angular/http', './components/main/main.component'], function(exports_1, context_1) {
+System.register(['@angular/platform-browser-dynamic', '@angular/http', './components/main/main.component', 'angularfire2'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
-    var platform_browser_dynamic_1, http_1, main_component_1;
+    var platform_browser_dynamic_1, http_1, main_component_1, angularfire2_1;
     return {
         setters:[
             function (platform_browser_dynamic_1_1) {
@@ -12,9 +12,16 @@ System.register(['@angular/platform-browser-dynamic', '@angular/http', './compon
             },
             function (main_component_1_1) {
                 main_component_1 = main_component_1_1;
+            },
+            function (angularfire2_1_1) {
+                angularfire2_1 = angularfire2_1_1;
             }],
         execute: function() {
-            platform_browser_dynamic_1.bootstrap(main_component_1.MainComponent, [http_1.HTTP_PROVIDERS]);
+            platform_browser_dynamic_1.bootstrap(main_component_1.MainComponent, [
+                http_1.HTTP_PROVIDERS,
+                angularfire2_1.FIREBASE_PROVIDERS,
+                angularfire2_1.defaultFirebase('https://flashfapp.firebaseio.com')
+            ]);
         }
     }
 });
