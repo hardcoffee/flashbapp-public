@@ -3,8 +3,8 @@ import {AngularFire, FirebaseListObservable} from 'angularfire2';
 
 @Component({
   selector: 'map-app',
-  templateUrl: 'app/components/map/map.component.html',
-  styleUrls: ['app/components/map/map.component.css']
+  templateUrl: require('./app/components/map/map.component.html'),
+  styleUrls: [require('./app/components/map/map.component.css')]
 })
 export class MapComponent implements OnInit, OnChanges {
   /**

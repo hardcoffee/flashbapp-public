@@ -8,8 +8,8 @@ import {AngularFire, FirebaseListObservable} from 'angularfire2';
 
 @Component({
   selector: 'flash-form',
-  templateUrl: 'app/components/flash-form/flash-form.component.html',
-  styleUrls: ['app/components/flash-form/flash-form.component.css'],
+  templateUrl: require('./app/components/flash-form/flash-form.component.html'),
+  styleUrls: [require('./app/components/flash-form/flash-form.component.css')],
   directives: [
     NgModel,
     MD_CARD_DIRECTIVES,

@@ -10,8 +10,8 @@ import {FlashView} from './../flash-view/flash-view.component';
 
 @Component({
   selector: 'flash-bapp',
-  templateUrl: 'app/components/main/main.component.html',
-  styleUrls: ['app/components/main/main.component.css'],
+  templateUrl: require('./app/components/main/main.component.html'),
+  styleUrls: [require('./app/components/main/main.component.css')],
   directives: [
     MD_CARD_DIRECTIVES,
     MdToolbar,
