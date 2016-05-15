@@ -3,7 +3,7 @@
     <md-toolbar>
       <div class="md-toolbar-tools">
         <span>Flashbapp</span>
-        <button md-fab (click)="formShowing = !formShowing">
+        <button md-fab (click)="formShowing = !formShowing" *ngIf="!formShowing">
           <md-icon>create</md-icon>
         </button>
       </div>

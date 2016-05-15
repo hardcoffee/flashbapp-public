@@ -9,6 +9,10 @@
   overflow: hidden;
 }
 
+[md-fab] {
+  margin-top: 64px;
+}
+
 md-content {
   position: relative;
   left: 0;
