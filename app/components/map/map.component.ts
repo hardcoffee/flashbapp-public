@@ -148,7 +148,9 @@ export class MapComponent implements OnInit, OnChanges {
     }
 
     this.flashCreated.emit({
-      externally: !!externally
+      externally: !!externally,
+      lat: marker.get('position').lat(),
+      lng: marker.get('position').lng()
     });
   }
 
