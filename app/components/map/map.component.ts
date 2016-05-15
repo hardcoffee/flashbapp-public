@@ -7,7 +7,7 @@ import {Component, OnInit, ElementRef, Input, OnChanges} from '@angular/core';
 })
 
 export class MapComponent implements OnInit, OnChanges {
-  @Input('disable-picker') disablePicker: boolean;
+  @Input('is-on-place') isOnPlace: boolean;
 
   /**
    * Center map. Required.
@@ -33,6 +33,8 @@ export class MapComponent implements OnInit, OnChanges {
    * Enables/disables map markers.
    */
   mapMarker: boolean;
+  
+  unSavedFlashBack: any;
 
   protected map: google.maps.Map;
 
@@ -52,8 +54,33 @@ export class MapComponent implements OnInit, OnChanges {
     this.mapMarker = true;
   }
   
-  ngOnChanges() {
-    console.log(this.disablePicker);
+  ngOnChanges() {    
+    //If is on place implements Geolocation   
+    if (this.isOnPlace) {
+      this.clearFlash();
+      if (!navigator.geolocation) {
+        console.error('Geolocation is not supported by this browser.');
+      }
+
+      navigator.geolocation.getCurrentPosition(function(position) {
+        var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+        let flash = this.createFlash(pos, 'You are here');
+        this.map.setCenter(pos);
+        
+        let contentValue = 'Id: '+ flash.get('id');
+        let infowindow = this.createInfowindow(contentValue);
+
+        flash.addListener('click', function() {
+          infowindow.open(flash.get('map'), flash);
+        });
+        
+        this.unSavedFlashBack = flash;      
+      }.bind(this), function() {
+        console.error('Error on get current position');
+      });
+    } else {
+      this.clearFlash();
+    }
   }
 
   ngOnInit() {
@@ -73,6 +100,9 @@ export class MapComponent implements OnInit, OnChanges {
     window.addEventListener('resize', () => { this.resize(); });
 
     this.map.addListener('click', function(event) {
+      
+      this.clearFlash();
+        
       let flash = this.createFlash(event.latLng, 'Here i had a flashback!');
 
       let contentValue = 'Id: '+ flash.get('id');
@@ -81,6 +111,8 @@ export class MapComponent implements OnInit, OnChanges {
       flash.addListener('click', function() {
         infowindow.open(flash.get('map'), flash);
       });
+      
+      this.unSavedFlashBack = flash;
 
       // Here we should open the form to load the data
     }.bind(this));
@@ -133,6 +165,13 @@ export class MapComponent implements OnInit, OnChanges {
 
       this.setBounds(bounds);
     });
+  }
+  
+  private clearFlash() {
+    if (typeof this.unSavedFlashBack !== 'undefined') {
+      this.unSavedFlashBack.setMap(null);
+      this.unSavedFlashBack = undefined;
+    }
   }
 
   private createInfowindow(contentValue: string) {

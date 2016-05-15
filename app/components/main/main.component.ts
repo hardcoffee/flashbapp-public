@@ -21,10 +21,10 @@ import {FlashForm} from './../flash-form/flash-form.component';
   providers: [ MdIconRegistry ]
 })
 export class MainComponent {
-  isOnPlace: boolean = true;
+  isOnPlace: boolean = false;
   formShowing: boolean = false;
   
-  myValueChange($event) {
+  isOnPlaceChange($event) {
     this.isOnPlace = $event.value;
   }
 }

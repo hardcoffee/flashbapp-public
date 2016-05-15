@@ -23,6 +23,6 @@ export class FlashForm {
   @Output('change') myevent = new EventEmitter(); 
   
   lunchEvent(){
-    this.myevent.emit({ value: this.isOnPlace });
+    this.myevent.emit({ value: !this.isOnPlace });
   }
 }
