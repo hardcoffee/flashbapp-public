@@ -6,5 +6,5 @@ import {FIREBASE_PROVIDERS, defaultFirebase} from 'angularfire2';
 bootstrap(MainComponent, [
     HTTP_PROVIDERS,
     FIREBASE_PROVIDERS,
-    defaultFirebase('https://flashfapp.firebaseio.com')
+    defaultFirebase('https://flashbapp.firebaseio.com')
 ]);
