@@ -60,19 +60,19 @@ export class MapComponent implements OnInit, OnChanges {
    * the flash that the user is about to upload.
    */
   savedFlash: google.maps.Marker;
-  
+
   flashes: FirebaseListObservable<any>;
-  
+
   private loadFlashes() {
     this.flashes.forEach((flashArray) => {
       flashArray.forEach((flashObject) => {
         let pos = new google.maps.LatLng(flashObject.lat, flashObject.lng);
-        this.createFlash(pos, flashObject.title, false, false, false, false, true, flashObject.id, flashObject.description, flashObject.date);
+        this.createFlash(pos, false, false, false, false, true, flashObject.title, flashObject.description, flashObject.date);
         this.savedFlash = undefined;
       });
     });
   }
-  
+
   /**
    * Create an info window with the specified text
    * that later can be opened clicking on its marker.
@@ -87,17 +87,21 @@ export class MapComponent implements OnInit, OnChanges {
    * Create a marker to place inside the map.
    * It sets random number as its default ID.
    */
-  private createMarker(position: google.maps.LatLng, exist: boolean, id: number) {
+  private createMarker(position: google.maps.LatLng, loadedFromDatabase: boolean, title: string, description: string, date: string) {
     let marker = new google.maps.Marker({
       map: this.map,
-      draggable: exist,
+      draggable: !loadedFromDatabase,
       position: position,
       visible: true
     });
 
-    marker.setValues({
-      id: id || Math.round(Math.random() * (999 - 100) + 100) // 100<->999
-    });
+    if (loadedFromDatabase) {
+      marker.setValues({
+        title: title,
+        description: description,
+        date: date
+      });
+    }
 
     return marker;
   }
@@ -116,8 +120,11 @@ export class MapComponent implements OnInit, OnChanges {
     this.map.setCenter(latLng);
   }
 
-  private openInfoWindow(infoWindow: google.maps.InfoWindow, marker: google.maps.Marker) {
-    infoWindow.open(marker.get('map'), marker);
+  private openInfoWindow(marker: google.maps.Marker, infoWindow: google.maps.InfoWindow) {
+    if (infoWindow) {
+      infoWindow.open(marker.get('map'), marker);
+    }
+
     this.markerSelected.emit({
       marker: marker
     });
@@ -131,15 +138,15 @@ export class MapComponent implements OnInit, OnChanges {
    * @text: optionally set a text for the info window object.
    * @unique: optionally create and set as the only flash on the map.
    * @center: optionally center the map on the given position.
-   * @infoWindowOpened: optionally open the info window.
+   * @infoWindowOpened: optionally open the info window at the moment of creation.
    * @externally: set to true when the flash is created by an external action.
-   * @exist:
-   * @id:
-   * @description:
-   * @date:
    * This is useful to notify the parent component that the intended creation was sucessful.
+   * @staticPosition: the marker cannot be moved.
+   * @title: title of the flash.
+   * @description: description of the flash.
+   * @date: the date of the flash.
    */
-  private createFlash(position: google.maps.LatLng, text: string, unique: boolean, center: boolean, infoWindowOpened: boolean, externally: boolean, exist: boolean, id: number, description: string, date: string) {
+   private createFlash(position: google.maps.LatLng, unique: boolean, center: boolean, infoWindowOpened: boolean, externally: boolean, staticPosition: boolean, title: string, description: string, date: string) {
     if (center) {
       this.map.setCenter(position);
     }
@@ -151,26 +158,18 @@ export class MapComponent implements OnInit, OnChanges {
     if (unique && this.savedFlash) {
       this.savedFlash.setMap(null);
     }
-    
-    let marker = this.savedFlash = this.createMarker(position, !exist, id);
-    text = text || 'Id: '+ marker.get('id');
-    let infoWindow = this.createInfoWindow(text);
-    
+
+    let marker = this.savedFlash = this.createMarker(position, staticPosition, title, description, date);
+
     if (infoWindowOpened) {
-      this.openInfoWindow(infoWindow, marker);
+      let infoWindow = this.createInfoWindow('You can drag me! Make sure of the place using Satellite view!');
+      this.openInfoWindow(marker, infoWindow);
     } else {
       marker.addListener('click', function() {
-        this.openInfoWindow(infoWindow, marker);
-        infoWindow.open(marker.get('map'), marker);
+        this.openInfoWindow(marker);
       }.bind(this));
     }
-    
-    marker.setValues({
-      title: text,
-      description: description,
-      date: date
-    })
-    
+
     this.flashCreated.emit({
       externally: !!externally,
       marker: marker
@@ -179,8 +178,8 @@ export class MapComponent implements OnInit, OnChanges {
 
   constructor(public elementRef: ElementRef, af: AngularFire) {
     //Get all flashes from angularfire2
-    this.flashes = af.database.list('/flashes');   
-    
+    this.flashes = af.database.list('/flashes');
+
     // Sets initial center map.
     this.center = new google.maps.LatLng(-38.416097, -63.616672);
 
@@ -210,7 +209,7 @@ export class MapComponent implements OnInit, OnChanges {
 
       navigator.geolocation.getCurrentPosition(function(position) {
         let pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-        this.createFlash(pos, null, true, true, false, true, false, null);
+        this.createFlash(pos, true, true, false, true, false, null);
       }.bind(this), function() {
         console.error('Error on get current position');
       });
@@ -229,13 +228,13 @@ export class MapComponent implements OnInit, OnChanges {
     // Instances the map.
     let el: HTMLElement = this.elementRef.nativeElement.querySelector('#map');
     this.map = new google.maps.Map(el, mapOptions);
-    
+
     this.loadFlashes();
 
     window.addEventListener('resize', () => { this.resize(); });
 
     this.map.addListener('click', function(event) {
-      this.createFlash(event.latLng, null, true);
+      this.createFlash(event.latLng, true);
       // TODO: open the form to load the data
     }.bind(this));
 
@@ -253,8 +252,7 @@ export class MapComponent implements OnInit, OnChanges {
      */
     searchBox.addListener('bounds_changed', function() {
       let position = searchBox.getBounds().getCenter();
-      let message = 'You can drag me! Make sure of the place using Satellite view!';
-      this.createFlash(position, message, true, false, true);
+      this.createFlash(position, true, false, true);
       this.map.fitBounds(searchBox.getBounds());
     }.bind(this));
 

@@ -48,7 +48,9 @@ export class MainComponent {
   openFlashView(event) {
     this._ngZone.run(function() {
       this.selectedMarker = event.marker;
-      this.isFlashViewOpen = this.isFlashViewAlive = true;
+
+      // Not all the marker has data to view
+      this.isFlashViewOpen = this.isFlashViewAlive = !!this.selectedMarker.title;
     }.bind(this));
   }
 }
