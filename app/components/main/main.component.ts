@@ -27,7 +27,11 @@ export class MainComponent {
   formShowing: boolean = false;
   flashId: number = 1;
 
-  setIsOnPlace($event) {
-    this.isOnPlace = $event.value;
+  updateIsOnPlaceFromInput(event) {
+    this.isOnPlace = event.value;
+  }
+
+  updateIsOnPlaceFromMap(event) {
+    this.isOnPlace = event.externally;
   }
 }
