@@ -1,4 +1,5 @@
 import {Component, OnInit, ElementRef, Input, OnChanges, Output, EventEmitter} from '@angular/core';
+import {AngularFire, FirebaseListObservable} from 'angularfire2';
 
 @Component({
   selector: 'map-app',
@@ -59,7 +60,19 @@ export class MapComponent implements OnInit, OnChanges {
    * the flash that the user is about to upload.
    */
   savedFlash: google.maps.Marker;
-
+  
+  flashes: FirebaseListObservable<any>;
+  
+  private loadFlashes() {
+    this.flashes.forEach((flashArray) => {
+      flashArray.forEach((flashObject) => {
+        let pos = new google.maps.LatLng(flashObject.lat, flashObject.lng);
+        this.createFlash(pos, flashObject.title, false, false, false, false, true, flashObject.id, flashObject.description, flashObject.date);
+        this.savedFlash = undefined;
+      });
+    });
+  }
+  
   /**
    * Create an info window with the specified text
    * that later can be opened clicking on its marker.
@@ -74,16 +87,16 @@ export class MapComponent implements OnInit, OnChanges {
    * Create a marker to place inside the map.
    * It sets random number as its default ID.
    */
-  private createMarker(position: google.maps.LatLng) {
+  private createMarker(position: google.maps.LatLng, exist: boolean, id: number) {
     let marker = new google.maps.Marker({
       map: this.map,
-      draggable: true,
+      draggable: exist,
       position: position,
       visible: true
     });
 
     marker.setValues({
-      id: Math.round(Math.random() * (999 - 100) + 100) // 100<->999
+      id: id || Math.round(Math.random() * (999 - 100) + 100) // 100<->999
     });
 
     return marker;
@@ -120,9 +133,11 @@ export class MapComponent implements OnInit, OnChanges {
    * @center: optionally center the map on the given position.
    * @infoWindowOpened: optionally open the info window.
    * @externally: set to true when the flash is created by an external action.
+   * @exist:
+   * @id:
    * This is useful to notify the parent component that the intended creation was sucessful.
    */
-  private createFlash(position: google.maps.LatLng, text: string, unique: boolean, center: boolean, infoWindowOpened: boolean, externally: boolean) {
+  private createFlash(position: google.maps.LatLng, text: string, unique: boolean, center: boolean, infoWindowOpened: boolean, externally: boolean, exist: boolean, id: number, description: string, date: string) {
     if (center) {
       this.map.setCenter(position);
     }
@@ -134,11 +149,11 @@ export class MapComponent implements OnInit, OnChanges {
     if (unique && this.savedFlash) {
       this.savedFlash.setMap(null);
     }
-
-    let marker = this.savedFlash = this.createMarker(position);
+    
+    let marker = this.savedFlash = this.createMarker(position, !exist, id);
     text = text || 'Id: '+ marker.get('id');
     let infoWindow = this.createInfoWindow(text);
-
+    
     if (infoWindowOpened) {
       this.openInfoWindow(infoWindow, marker);
     } else {
@@ -147,14 +162,23 @@ export class MapComponent implements OnInit, OnChanges {
         infoWindow.open(marker.get('map'), marker);
       }.bind(this));
     }
-
+    
+    marker.setValues({
+      title: text,
+      description: description,
+      date: date
+    })
+    
     this.flashCreated.emit({
       externally: !!externally,
       marker: marker
     });
   }
 
-  constructor(public elementRef: ElementRef) {
+  constructor(public elementRef: ElementRef, af: AngularFire) {
+    //Get all flashes from angularfire2
+    this.flashes = af.database.list('/flashes');   
+    
     // Sets initial center map.
     this.center = new google.maps.LatLng(-38.416097, -63.616672);
 
@@ -184,7 +208,7 @@ export class MapComponent implements OnInit, OnChanges {
 
       navigator.geolocation.getCurrentPosition(function(position) {
         let pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-        this.createFlash(pos, null, true, true, false, true);
+        this.createFlash(pos, null, true, true, false, true, false, null);
       }.bind(this), function() {
         console.error('Error on get current position');
       });
@@ -203,6 +227,8 @@ export class MapComponent implements OnInit, OnChanges {
     // Instances the map.
     let el: HTMLElement = this.elementRef.nativeElement.querySelector('#map');
     this.map = new google.maps.Map(el, mapOptions);
+    
+    this.loadFlashes();
 
     window.addEventListener('resize', () => { this.resize(); });
 
