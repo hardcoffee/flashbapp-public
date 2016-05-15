@@ -135,6 +135,8 @@ export class MapComponent implements OnInit, OnChanges {
    * @externally: set to true when the flash is created by an external action.
    * @exist:
    * @id:
+   * @description:
+   * @date:
    * This is useful to notify the parent component that the intended creation was sucessful.
    */
   private createFlash(position: google.maps.LatLng, text: string, unique: boolean, center: boolean, infoWindowOpened: boolean, externally: boolean, exist: boolean, id: number, description: string, date: string) {
