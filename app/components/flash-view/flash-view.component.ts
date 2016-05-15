@@ -1,7 +1,6 @@
 import {Component, Input, Output, EventEmitter} from '@angular/core';
 import {MD_CARD_DIRECTIVES} from '@angular2-material/card';
 import {MdIcon, MdIconRegistry} from '@angular2-material/icon';
-import {AngularFire, FirebaseListObservable} from 'angularfire2';
 
 @Component({
   selector: 'flash-view',
@@ -14,14 +13,8 @@ import {AngularFire, FirebaseListObservable} from 'angularfire2';
   providers: [ MdIconRegistry ]
 })
 export class FlashView {
-  @Input('marker-values') markerValues: Object;
+  @Input('marker-values') flash: Object = {};
   @Output('close-view') closeView = new EventEmitter();
-  
-  flashes: FirebaseListObservable<any>;
-  
-  constructor(af: AngularFire) {
-    this.flashes = af.database.list('/flashes');    
-  }
 
   closeItSelf() {
     this.closeView.emit({});
