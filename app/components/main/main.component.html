@@ -2,7 +2,10 @@
   <md-content>
     <md-toolbar>
       <div class="md-toolbar-tools">
-        <span>Flashbapp</span>
+        <div class="app-details">
+          <img src="/logo.png" alt="Flashbapp logo">
+          <span>Flashbapp</span>
+        </div>
         <button md-fab (click)="formShowing = !formShowing" *ngIf="!formShowing">
           <md-icon>create</md-icon>
         </button>

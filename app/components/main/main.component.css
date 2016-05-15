@@ -9,6 +9,11 @@
   overflow: hidden;
 }
 
+img {
+  height: 52px;
+  width: 45px;
+}
+
 [md-fab] {
   margin-top: 64px;
 }
@@ -38,6 +43,11 @@ md-toolbar {
   justify-content: space-between;
 }
 
+.app-details {
+  display: flex;
+  align-items: center;
+}
+
 /* Initially hidden form */
 .form-container {
   position: absolute;
@@ -58,7 +68,7 @@ md-toolbar {
   height: calc(100% - 110px);
   width: 30vw;
   right: 0;
-  left: 0;  
+  left: 0;
   display: none;
 
   transition: all ease-in-out 0.5s;
