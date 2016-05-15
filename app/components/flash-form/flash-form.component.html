@@ -2,16 +2,16 @@
   <md-card-title>Tell your story creating a flash</md-card-title>
   <md-card-content>
     <form>
-      <md-input placeholder="Title" [(ngModel)]="flash.title"></md-input>
-      <md-input placeholder="Description" [(ngModel)]="flash.description"></md-input>
+      <md-input placeholder="Title" required [(ngModel)]="flash.title"></md-input>
+      <md-input placeholder="Description" required [(ngModel)]="flash.description"></md-input>
       <div>
-        <md-checkbox [(ngModel)]="isOnPlace" (click)="checkboxValueUpdated()">I'm on place</md-checkbox>
+        <md-checkbox required [(ngModel)]="isOnPlace" (click)="checkboxValueUpdated()">I'm on place</md-checkbox>
         <span class="help-text">Click here or pick a place on the map</span>
       </div>
     </form>
   </md-card-content>
   <md-card-actions class="md-actions">
     <button md-raised-button (click)="closeForm()">Cancel</button>
-    <button md-raised-button color="accent" (click)="submitForm()">Create</button>
+    <button type="submit" md-raised-button color="accent" (click)="submitForm()">Create</button>
   </md-card-actions>
 </md-card>

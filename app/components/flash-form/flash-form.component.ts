@@ -46,7 +46,7 @@ export class FlashForm {
   submitForm() {
     const position = this.createdMarker && this.createdMarker.position;
 
-    if (position) {
+    if (position && this.flash.title && this.flash.description) {
       const promise = this.flashes.push({
         title: this.flash.title,
         description: this.flash.description,
