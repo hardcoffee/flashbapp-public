@@ -4,6 +4,7 @@
     <form>
       <md-input placeholder="Title" required [(ngModel)]="flash.title"></md-input>
       <md-input placeholder="Description" required [(ngModel)]="flash.description"></md-input>
+      <input type="date" required [(ngModel)]="flash.date">
       <div>
         <md-checkbox required [(ngModel)]="isOnPlace" (click)="checkboxValueUpdated()">I'm on place</md-checkbox>
         <span class="help-text">Click here or pick a place on the map</span>

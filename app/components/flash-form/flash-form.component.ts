@@ -46,10 +46,11 @@ export class FlashForm {
   submitForm() {
     const position = this.createdMarker && this.createdMarker.position;
 
-    if (position && this.flash.title && this.flash.description) {
+    if (position && this.flash.title && this.flash.description && this.flash.date) {
       const promise = this.flashes.push({
         title: this.flash.title,
         description: this.flash.description,
+        date: this.flash.date,
         lat: position.lat(),
         lng: position.lng()
       });
