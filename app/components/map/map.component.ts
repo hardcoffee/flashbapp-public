@@ -1,4 +1,4 @@
-import {Component, OnInit, ElementRef, Input} from '@angular/core';
+import {Component, OnInit, ElementRef, Input, OnChanges} from '@angular/core';
 
 @Component({
   selector: 'map-app',
@@ -6,7 +6,7 @@ import {Component, OnInit, ElementRef, Input} from '@angular/core';
   styleUrls: ['app/components/map/map.component.css']
 })
 
-export class MapComponent implements OnInit {
+export class MapComponent implements OnInit, OnChanges {
   @Input('disable-picker') disablePicker: boolean;
 
   /**
@@ -51,13 +51,13 @@ export class MapComponent implements OnInit {
     // Enable map marker
     this.mapMarker = true;
   }
+  
+  ngOnChanges() {
+    console.log(this.disablePicker);
+  }
 
   ngOnInit() {
-    console.log(this.disablePicker);
-    setInterval(function() {
-      console.log('disablePicker', this.disablePicker);
-    }.bind(this), 600);
-
+    
     let mapOptions = {
       center: this.center,
       mapMarker: this.mapMarker,

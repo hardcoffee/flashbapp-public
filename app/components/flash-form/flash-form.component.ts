@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, Output, EventEmitter} from '@angular/core';
 import {NgModel} from '@angular/common';
 import {MD_CARD_DIRECTIVES} from '@angular2-material/card';
 import {MdButton} from '@angular2-material/button';
@@ -15,8 +15,14 @@ import {MdCheckbox} from '@angular2-material/checkbox';
     MdButton,
     MdInput,
     MdCheckbox
-  ]
+  ],
+  outputs: ['myevent']
 })
 export class FlashForm {
-  @Input('is-on-place') isOnPlace: boolean;
+  @Input('is-on-place') isOnPlace: boolean;  
+  @Output('change') myevent = new EventEmitter(); 
+  
+  lunchEvent(){
+    this.myevent.emit({ value: this.isOnPlace });
+  }
 }

@@ -23,4 +23,8 @@ import {FlashForm} from './../flash-form/flash-form.component';
 export class MainComponent {
   isOnPlace: boolean = true;
   formShowing: boolean = false;
+  
+  myValueChange($event) {
+    this.isOnPlace = $event.value;
+  }
 }
