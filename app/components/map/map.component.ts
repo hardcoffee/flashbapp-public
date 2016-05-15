@@ -69,9 +69,8 @@ export class MapComponent implements OnInit {
     this.map.addListener('click', function(event) {
       let flash = this.createFlash(event.latLng, 'Here i had a flashback!');
 
-      let infowindow = new google.maps.InfoWindow({
-        content: 'Id: '+ flash.get('id')
-      });
+      let contentValue = 'Id: '+ flash.get('id');
+      let infowindow = this.createInfowindow(contentValue);      
 
       flash.addListener('click', function() {
         infowindow.open(flash.get('map'), flash);
@@ -79,6 +78,63 @@ export class MapComponent implements OnInit {
 
       // Here we should open the form to load the data
     }.bind(this));
+    
+    /**
+     * Create the search box and link it to the UI element.
+     */
+    let input: HTMLInputElement = this.elementRef.nativeElement.querySelector('#pac-input');
+    let searchBox = new google.maps.places.SearchBox(input);
+    this.map.controls[ google.maps.ControlPosition.TOP_LEFT ].push(input);
+
+    // Bias the SearchBox results towards current map's viewport.
+    searchBox.addListener('bounds_changed', function() {
+      let flashMarker = this.createFlash(searchBox.getBounds().getCenter(), 'Search flashback');
+      this.map.fitBounds(searchBox.getBounds());                  
+      
+      let infowindow = this.createInfowindow('You can drag me! Make sure of the place using Satellite view!');
+      infowindow.open(flashMarker.get('map'), flashMarker);
+      
+    }.bind(this));
+
+    // Listen for the event fired when the user selects a prediction and retrieve
+    // more details for that place.
+    searchBox.addListener('places_changed', function() {
+      let places = searchBox.getPlaces();
+
+      if (!places.length) {
+        return;
+      }
+
+      // For each place, get the icon, name and location.
+      let bounds = new google.maps.LatLngBounds();
+
+      places.forEach(function(place) {
+        let icon = {
+          url: place.icon,
+          size: new google.maps.Size(71, 71),
+          origin: new google.maps.Point(0, 0),
+          anchor: new google.maps.Point(17, 34),
+          scaledSize: new google.maps.Size(25, 25)
+        };
+
+        if (place.geometry.viewport) {
+          // Only geocodes have viewport.
+          bounds.union(place.geometry.viewport);
+        } else {
+          bounds.extend(place.geometry.location);
+        }
+      });
+
+      this.setBounds(bounds);
+    });
+  }
+  
+  private createInfowindow(contentValue: string) {
+    let infowindow = new google.maps.InfoWindow({
+      content: contentValue
+    });
+    
+    return infowindow;    
   }
   
   private createFlash(position: google.maps.LatLng, title: string) {
