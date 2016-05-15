@@ -6,3 +6,11 @@
   width: 3rem;
   height: 3rem;
 }
+
+md-icon {
+  padding-top: 12.5px; 
+}
+
+.md-card-container{
+  height: 100%;
+}
