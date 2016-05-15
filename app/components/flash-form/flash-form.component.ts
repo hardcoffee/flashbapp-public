@@ -20,10 +20,11 @@ import {AngularFire, FirebaseListObservable} from 'angularfire2';
 })
 export class FlashForm {
   @Input('is-on-place') isOnPlace: boolean;
+  @Input('created-marker') createdMarker: any;
   @Output('checkbox-changed') checkboxChanged = new EventEmitter();
   @Output('close-form') doCloseForm = new EventEmitter();
 
-  flash: Object = {};
+  flash: any = {};
   flashes: FirebaseListObservable<any>;
 
   constructor(af:AngularFire) {
@@ -43,13 +44,22 @@ export class FlashForm {
   }
 
   submitForm() {
-    const promise = this.flashes.push(this.flash);
+    const position = this.createdMarker && this.createdMarker.position;
 
-    promise
-      .then(function(){
-        this.flash = {};
-        this.closeForm();
-      }.bind(this))
-      .catch(err => console.log(err, 'Failed to create a flash.'));
+    if (position) {
+      const promise = this.flashes.push({
+        title: this.flash.title,
+        description: this.flash.description,
+        lat: position.lat(),
+        lng: position.lng()
+      });
+
+      promise
+        .then(function(){
+          this.flash = {};
+          this.closeForm();
+        }.bind(this))
+        .catch(err => console.log(err, 'Failed to create a flash.'));
+    }
   }
 }

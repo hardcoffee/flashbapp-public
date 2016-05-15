@@ -27,7 +27,8 @@ export class MainComponent {
   formShowing: boolean = false;
   isFlashViewOpen: boolean = false;
   isFlashViewAlive: boolean = false;
-  selectedMarker: Object;
+  selectedMarker: google.maps.Marker;
+  createdMarker: google.maps.Marker;
 
   constructor(private _ngZone: NgZone) {}
 
@@ -37,8 +38,9 @@ export class MainComponent {
 
   updateIsOnPlaceFromMap(event) {
     this.isOnPlace = event.externally;
+    this.createdMarker = event.marker;
   }
-  
+
   closeForm(event) {
     this.formShowing = event.value;
   }
