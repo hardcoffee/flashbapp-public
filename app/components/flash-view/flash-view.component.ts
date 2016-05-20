@@ -4,8 +4,8 @@ import {MdIcon, MdIconRegistry} from '@angular2-material/icon';
 
 @Component({
   selector: 'flash-view',
-  templateUrl: require('./app/components/flash-view/flash-view.component.html'),
-  styleUrls: [require('./app/components/flash-view/flash-view.component.css')],
+  template: require('./flash-view.component.html'),
+  styles: [require('./flash-view.component.css')],
   directives: [
     MD_CARD_DIRECTIVES,
     MdIcon

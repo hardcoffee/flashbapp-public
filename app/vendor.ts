@@ -10,5 +10,5 @@ import '@angular/platform-browser-dynamic';
 import 'firebase';
 import 'angularfire2';
 
-import 'angular2-in-memory-web-api';
+//import 'angular2-in-memory-web-api';
 import 'rxjs';

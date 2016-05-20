@@ -6,7 +6,7 @@
     "lite": "lite-server",
     "postinstall": "typings install",
     "typings": "typings",
-    "build": "rm -rf dist && npm run webpack --config config/webpack.common.js --progress --profile --bail"
+    "build": "rm -rf dist && webpack --progress --profile"
   },
   "license": "MIT",
   "dependencies": {
@@ -43,8 +43,14 @@
     "lite-server": "^2.2.0",
     "typescript": "^1.8.10",
     "typings": "^0.8.1",
+
+    "extract-text-webpack-plugin": "^1.0.1",
+    "html-webpack-plugin": "^2.15.0",
+    "file-loader": "^0.8.5",
+    "html-loader": "^0.4.3",
+    "raw-loader": "^0.5.1",
+    "ts-loader": "^0.8.1",
     "webpack": "1.13.0",
-    "webpack-dev-server": "^1.14.1",
     "webpack-merge": "0.12.0"
   }
 }
