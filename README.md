@@ -1,18 +1,25 @@
-# This is our [AngularAttack](https://www.angularattack.com) 2016 Repo
+# Flashbapp
 
-> The start of our AngularAttack 2016 entry.
+> This was once our [AngularAttack](https://www.angularattack.com) 2016 project
 
-Currently it has a basic typescript project structure without functionality.
+Create a flash on a place with a date and description of
+what happened there and share it with people around the world.
 
-### Step 1) Get Your Local Environment setup
+### Step 1) Understand what is this
+
+This is an Angular 2 project and your looking at the `master` branch.
+Right here you cannot make any deploy, for that you have the `webpack` branch.
+The status is a working Alpha application waiting to be developed.
+
+### Step 2) Get Your Local Environment setup
 
 Clone this repo locally
 
 * Install the latest [Node / NPM](https://nodejs.org).
 
-* `git clone git@github.com:rumblex/angularattack2016-4promises.git`
+* `git clone git@github.com:hardcoffee/flashbapp.git`
 
-* `cd angularattack2016-4promises`
+* `cd flashbapp`
 
 * `npm install`
 
@@ -21,16 +28,7 @@ Clone this repo locally
 
 ### Step 2) Deploy App
 
-The deployment of this sample app is made to [Surge](https://surge.sh).
-
-* `npm install -g surge`
-
-* `surge .`
-
-After make a change, you don't need to commit just run `surge .`
-again and refresh [the instance](http://4promises.2016.angularattack.io) on the browser.
-
-Note: please do not remove the `CNAME` file, as that tells it where to deploy to.
+Not possible. This is not prepared to be deployed.
 
 ### Step 3) Happy coding
 
